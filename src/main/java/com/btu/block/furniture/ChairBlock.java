@@ -1,11 +1,8 @@
-// com/btu/block/furniture/ChairBlock.java
-
 package com.btu.block.furniture;
 
 import com.btu.entity.SeatEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -20,17 +17,12 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class ChairBlock extends HorizontalFacingBlock {
 
-    // Hitbox basée sur votre modèle
     protected static final VoxelShape SHAPE = VoxelShapes.union(
-            Block.createCuboidShape(1, 10, 1, 15, 11, 14), // Assise
-            Block.createCuboidShape(1, 0, 1, 3, 10, 3),    // Pieds...
-            Block.createCuboidShape(13, 0, 1, 15, 10, 3),
-            Block.createCuboidShape(1, 0, 13, 3, 10, 15),
-            Block.createCuboidShape(13, 0, 13, 15, 10, 15),
-            Block.createCuboidShape(1, 10, 14, 15, 26, 15) // Dossier
+            Block.createCuboidShape(1, 0, 1, 15, 11, 15)
     );
 
     public ChairBlock(Settings settings) {
@@ -38,13 +30,10 @@ public class ChairBlock extends HorizontalFacingBlock {
         setDefaultState(this.stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
-    // 🟢 FIX CRASH: Implémentation correcte du MapCodec requis.
     @Override
     protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
         return createCodec(ChairBlock::new);
     }
-
-    // --- Gestion de la Rotation ---
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
@@ -52,11 +41,14 @@ public class ChairBlock extends HorizontalFacingBlock {
     }
 
     @Override
+    @Nullable
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerLookDirection().getOpposite());
+        Direction playerFacing = ctx.getHorizontalPlayerFacing().getOpposite();
+        if (!ctx.getWorld().getBlockState(ctx.getBlockPos().down()).isSideSolidFullSquare(ctx.getWorld(), ctx.getBlockPos().down(), Direction.UP)) {
+            return this.getDefaultState().with(FACING, Direction.NORTH);
+        }
+        return this.getDefaultState().with(FACING, playerFacing);
     }
-
-    // --- Gestion de la Hitbox et du Rendu ---
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
@@ -68,25 +60,25 @@ public class ChairBlock extends HorizontalFacingBlock {
         return BlockRenderType.MODEL;
     }
 
-
-    // --- Fonctionnalité S'ASSEOIR ---
+    // Dans com/btu/block/furniture/ChairBlock.java
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        // Logique pour s'asseoir
         if (world.isClient() || player.isSneaking() || !player.getStackInHand(Hand.MAIN_HAND).isEmpty()) {
             return ActionResult.PASS;
         }
 
-        // Vérifie si un siège (SeatEntity) n'est pas déjà présent
         if (world.getOtherEntities(null, new Box(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0, pos.getY() + 1.5, pos.getZ() + 1.0)).isEmpty()) {
+            Direction chairFacing = state.get(Properties.HORIZONTAL_FACING);
+            float yaw = chairFacing.asRotation();
+            SeatEntity seat = new SeatEntity(world, pos.getX()+0.5, pos.getY()-1.3, pos.getZ()+0.5);
 
-            // Crée l'entité siège invisible
-            SeatEntity seat = new SeatEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            seat.setYaw(yaw);
+            seat.setHeadYaw(yaw);
             world.spawnEntity(seat);
 
-            // Fait monter le joueur dessus (s'asseoir)
             player.startRiding(seat);
+            player.setYaw(yaw);
 
             return ActionResult.SUCCESS;
         }

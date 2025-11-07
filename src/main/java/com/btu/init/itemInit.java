@@ -18,6 +18,14 @@ public class ItemInit {
     // Block registeration method
     public static final BlockItem Example_BlockItem = registerItem("example_block_item", new BlockItem(BlockInit.EXAMPLE_BLOCK, new Item.Settings()));
     public static final BlockItem OakChair_BlockItem = registerItem("oak_chair_block_item", new BlockItem(BlockInit.OAK_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem DarkOakChair_BlockItem = registerItem("dark_oak_chair_block_item", new BlockItem(BlockInit.DARK_OAK_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem BirchChair_BlockItem = registerItem("birch_chair_block_item", new BlockItem(BlockInit.BIRCH_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem SpruceChair_BlockItem = registerItem("spruce_chair_block_item", new BlockItem(BlockInit.SPRUCE_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem JungleChair_BlockItem = registerItem("jungle_chair_block_item", new BlockItem(BlockInit.JUNGLE_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem AcaciaChair_BlockItem = registerItem("acacia_chair_block_item", new BlockItem(BlockInit.ACACIA_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem CherryChair_BlockItem = registerItem("cherry_chair_block_item", new BlockItem(BlockInit.CHERRY_CHAIR_BLOCK, new Item.Settings()));
+    public static final BlockItem MangroveChair_BlockItem = registerItem("mangrove_chair_block_item", new BlockItem(BlockInit.MANGROVE_CHAIR_BLOCK, new Item.Settings()));
+
 
     public static <T extends Item> T registerItem(String name, T item) {
         BetterThanUpdate.LOGGER.info("Registering item: " + name);

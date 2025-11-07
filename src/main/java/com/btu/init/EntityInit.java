@@ -16,13 +16,10 @@ public class EntityInit {
     public static final EntityType<SeatEntity> SEAT = Registry.register(
             Registries.ENTITY_TYPE,
             BetterThanUpdate.id("seat"),
-            // 🟢 CORRECTION: Ajout du type générique <SeatEntity>
             FabricEntityTypeBuilder.<SeatEntity>create(SpawnGroup.MISC, SeatEntity::new)
                     .dimensions(EntityDimensions.fixed(0.01f, 0.01f))
                     .build()
     );
 
-    public static void load() {
-        // Cette méthode vide force le chargement de la classe et l'enregistrement
-    }
+    public static void load() {}
 }

@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "better-than-update",
+	"id": "betterthanupdate",
 	"version": "${version}",
-	"name": "Better-than-update",
+	"name": "BetterThanUpdate",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
 		"Me!"
@@ -12,29 +12,29 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/better-than-update/icon.png",
+	"icon": "assets/betterthanupdate/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.betterthanupdate.Betterthanupdate"
+			"com.btu.BetterThanUpdate"
 		],
 		"client": [
-			"com.betterthanupdate.BetterthanupdateClient"
+			"com.btu.BetterThanUpdateClient"
 		],
 		"fabric-datagen": [
-			"com.betterthanupdate.BetterthanupdateDataGenerator"
+			"com.btu.BetterThanUpdateDataGenerator"
 		]
 	},
 	"mixins": [
-		"better-than-update.mixins.json",
+		"betterthanupdate.mixins.json",
 		{
-			"config": "better-than-update.client.mixins.json",
+			"config": "betterthanupdate.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "~1.21.10",
+		"minecraft": "~1.21.1",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
